@@ -1,3 +1,50 @@
+/* common styles */
+.App[data-theme-type='light'] {
+  --clr-text: var(--clr-txt-light);
+  --clr-bg: var(--clr-bg-light);
+  --clr-ui: var(--clr-ui-light);
+  --clr-placeholder: var(--clr-placeholder-light);
+}
+
+.App[data-theme-type='dark'] {
+  --clr-text: var(--clr-txt-dark);
+  --clr-bg: var(--clr-bg-dark);
+  --clr-ui: var(--clr-ui-dark);
+  --clr-placeholder: var(--clr-placeholder-dark);
+}
+
 .App {
-  text-align: center;
+  min-height: 100vh;
+  height: 100%;
+  font-family: var(--family);
+  font-size: var(--fs-md);
+  color: var(--clr-text);
+  background-color: var(--clr-bg);
+
+}
+/* header styles */
+.header {
+  background: var( --clr-ui);
+  box-shadow: var(--shadow);
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--max-width);
+  padding-block: 1.5em;
+  margin: 0 auto;
+}
+
+.headerTitle {
+  font-size: var(--fs-xl);
+  margin: 0;
+}
+
+/* main styles */
+.main {
+  max-width: var(--max-width);
+  padding-block: 1em;
+  margin: 0 auto;
 }

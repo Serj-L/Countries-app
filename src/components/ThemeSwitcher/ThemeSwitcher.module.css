@@ -1,0 +1,14 @@
+.themeSwitcherWrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  cursor: pointer;
+}
+.themeSwitcherIconWrapper {
+  line-height: 0;
+}
+
+.themeType {
+  font-weight: var(--fw-normal);
+  line-height: 0;
+}
