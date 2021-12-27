@@ -20,11 +20,12 @@
   font-size: var(--fs-md);
   color: var(--clr-text);
   background-color: var(--clr-bg);
-
 }
+
 /* header styles */
 .header {
   background: var( --clr-ui);
+  padding: 1.5em 1em;
   box-shadow: var(--shadow);
 }
 
@@ -33,7 +34,6 @@
   justify-content: space-between;
   align-items: center;
   max-width: var(--max-width);
-  padding-block: 1.5em;
   margin: 0 auto;
 }
 
@@ -44,7 +44,10 @@
 
 /* main styles */
 .main {
+  padding: 1.5em 1em;
+}
+
+.mainContainer {
   max-width: var(--max-width);
-  padding-block: 1em;
   margin: 0 auto;
 }

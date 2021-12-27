@@ -34,10 +34,9 @@ function App() {
         </div>
       </header>
       <main className={styles.main}>
-        <div className={styles.mainControls}>
-
+        <div className={styles.mainContainer}>
+          <AppRouter />
         </div>
-        <AppRouter />
       </main>
     </div>
   );

@@ -12,4 +12,5 @@ export enum RoutesEnum {
 
 export enum LocalStorageKeys {
   THEMETYPE = 'ContriesAppThemeType',
+  COUNTRIESDATA = 'ContriesAppCountriesData',
 }
