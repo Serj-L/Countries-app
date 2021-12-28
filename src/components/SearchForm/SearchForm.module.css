@@ -1,0 +1,47 @@
+.SearchFormForm {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  flex-grow: 1;
+  max-width: 400px;
+  height: var(--height-form-elements);
+  background: var(--clr-ui);
+  padding-inline: 1.5em;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.searchIconWrapper,
+.clearSearchBtn {
+  color: var(--clr-placeholder);
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.clearSearchBtn {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.clearSearchBtn:disabled {
+  color: transparent;
+}
+
+.searchInput {
+  width: 100%;
+  background: var(--clr-ui);
+  font-size: var(--fs-md);
+  color: var(--clr-placeholder);
+  line-height: 0;
+  border: none;
+  outline: none;
+  padding-block: 0.5em;
+}
+
+.searchInput::placeholder {
+  font-weight: var(--fw-light);
+  color: var(--clr-placeholder);
+  opacity: 1;
+}

@@ -12,5 +12,14 @@ export enum RoutesEnum {
 
 export enum LocalStorageKeys {
   THEMETYPE = 'ContriesAppThemeType',
-  COUNTRIESDATA = 'ContriesAppCountriesData',
+  FILTERVALUE = 'ContriesAppFilterValue',
+}
+
+export enum RegionFilterOptions {
+  ALLREGIONS = 'All regions',
+  AFRICA = 'Africa',
+  AMERICA = 'Americas',
+  ASIA = 'Asia',
+  EUROPE = 'Europe',
+  OCEANIA = 'Oceania',
 }

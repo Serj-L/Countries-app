@@ -1,0 +1,18 @@
+.filterWrapper {
+  flex-grow: 1;
+  max-width: 200px;
+}
+
+.filterSelect {
+  width: 100%;
+  height: var(--height-form-elements);
+  font-size: var(--fs-md);
+  color: var(--clr-placeholder);
+  background: var(--clr-ui);
+  padding: 0.2em 1em;
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  outline: none;
+  cursor: pointer;
+}

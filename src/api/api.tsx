@@ -33,7 +33,7 @@ export const getAllCountriesFromAPI = async (): Promise<CountryDataList[]> => {
 };
 
 export const getAllCountriesByRegionFilterFromAPI = async (region: string): Promise<CountryDataList[]> => {
-  const response = await axios.get(`${BASE_API_URL}continent/${region}?fields=name,${FIELDS_COUNTRIES_LIST.join(',')}`);
+  const response = await axios.get(`${BASE_API_URL}region/${region.toLowerCase()}?fields=name,${FIELDS_COUNTRIES_LIST.join(',')}`);
   const data = await response.data;
 
   return data;

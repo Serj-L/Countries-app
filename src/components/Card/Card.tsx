@@ -34,9 +34,9 @@ const Card: FC<CardProps> = ({
       </div>
       <div className={styles.countryInfoWrapper}>
         <h2 className={styles.countryName}>{countryData.name}</h2>
-        <p className={styles.countryInfoTitle}>Population: <span className={styles.countryInfoValue}>{countryData.population.toLocaleString('en-EN')}</span></p>
-        <p className={styles.countryInfoTitle}>Region: <span className={styles.countryInfoValue}>{countryData.region}</span></p>
-        <p className={styles.countryInfoTitle}>Capital: <span className={styles.countryInfoValue}>{countryData.capital}</span></p>
+        <p className={styles.countryInfoTitle}>Population: <span className={styles.countryInfoValue}>{countryData.population.toLocaleString('en-EN') || 'n/a'}</span></p>
+        <p className={styles.countryInfoTitle}>Region: <span className={styles.countryInfoValue}>{countryData.region || 'n/a'}</span></p>
+        <p className={styles.countryInfoTitle}>Capital: <span className={styles.countryInfoValue}>{countryData.capital || 'n/a'}</span></p>
       </div>
     </div>
   );
