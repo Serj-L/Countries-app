@@ -1,0 +1,31 @@
+.snackBarWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 20em;
+  font-size: var(--fs-md);
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 0 0 var(--radius) var(--radius);
+  background-color: var(--clr-bg);
+  padding: 1em;
+  box-shadow: var(--shadow);
+  transition: 0.4s;
+  z-index: 50;
+}
+
+.snackBarWrapper[data-is-open='true'] {
+  top: 0;
+}
+
+.snackBarWrapper[data-is-open='false'] {
+  top: -50%;
+}
+
+.snackBarText {
+  text-align: center;
+  color: var(--clr-text);
+  font-weight: var(--fw-bold);
+  margin: 0;
+}

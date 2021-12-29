@@ -1,4 +1,4 @@
-import { FC, useState, FormEvent } from 'react';
+import { FC, useState, useEffect, FormEvent } from 'react';
 
 import { SearchIcon, CrossIcon } from '..';
 
@@ -6,24 +6,30 @@ import styles from './SearchForm.module.css';
 
 interface SearchFormProps {
   placeholder?: string,
+  submitedValue: string,
   onSubmit: (event: FormEvent) => void,
   onReset: () => void,
 }
 
 const SearchForm: FC<SearchFormProps> = ({
   placeholder = 'Type search request here...',
+  submitedValue,
   onSubmit,
   onReset,
 }) => {
-  const [isClearBtnDisabled, setIsClearBtnDisabled] = useState<boolean>(true);
+  const [inputValue, setInputValue] = useState<string>('');
 
   const onChangeHandler = (value: string) => {
-    value ? setIsClearBtnDisabled(false) : setIsClearBtnDisabled(true);
+    setInputValue(value);
   };
   const onResetHandler = () => {
-    setIsClearBtnDisabled(true);
+    setInputValue('');
     onReset();
   };
+
+  useEffect(() => {
+    setInputValue(submitedValue);
+  }, [submitedValue]);
 
   return (
     <form
@@ -44,12 +50,13 @@ const SearchForm: FC<SearchFormProps> = ({
         placeholder={placeholder}
         name='searchValue'
         autoComplete='off'
+        value={inputValue}
         onChange={event => onChangeHandler(event.currentTarget.value)}
       />
       <button
         className={styles.clearSearchBtn}
         type='reset'
-        disabled={isClearBtnDisabled}
+        disabled={!inputValue}
       >
         <CrossIcon
           width={20}

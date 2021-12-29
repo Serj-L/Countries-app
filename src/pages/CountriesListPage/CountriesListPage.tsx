@@ -8,7 +8,7 @@ import {
 } from '../../api/api';
 import { LocalStorageKeys, RegionFilterOptions } from '../../types';
 
-import { Card, SearchForm, Filter } from '../../components';
+import { Card, SearchForm, Filter, SnackBar } from '../../components';
 
 import styles from './CountriesListPage.module.css';
 
@@ -18,6 +18,7 @@ const filterOptions: string[] = Object.values(RegionFilterOptions).filter(option
 
 const CountriesListPage: FC<CountriesListPageProps> = () => {
   const [countriesList, setCountriesList] = useState<CountryDataList[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [filterValue, setFilterValue] = useState<string>(localStorage.getItem(LocalStorageKeys.FILTERVALUE) || RegionFilterOptions.ALLREGIONS);
 
@@ -46,15 +47,20 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
         const response = await getAllCountriesFromAPI();
         setCountriesList(response);
       } catch (error) {
-        console.error(error);
+        setErrorMessage(`${error}.`);
       }
     }
     async function getCountriesByNameSearch() {
       try {
         const response = await getCountriesByNameSearchFromAPI(searchValue);
-        setCountriesList(response);
+
+        if (Array.isArray(response)) {
+          setCountriesList(response);
+        } else {
+          setErrorMessage('Country not found, please check your search request.');
+        }
       } catch (error) {
-        console.error(error);
+        setErrorMessage(`${error}.`);
       }
     }
     async function getAllCountriesByRegionFilter() {
@@ -62,7 +68,7 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
         const response = await getAllCountriesByRegionFilterFromAPI(filterValue);
         setCountriesList(response);
       } catch (error) {
-        console.error(error);
+        setErrorMessage(`${error}.`);
       }
     }
 
@@ -80,6 +86,7 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
       <div className={styles.countriesListControls}>
         <SearchForm
           placeholder='Search for a country...'
+          submitedValue={searchValue}
           onSubmit={onSearch}
           onReset={onResetSearch}
         />
@@ -91,23 +98,31 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
           onChange={onFilter}
         />
       </div>
-      <ul className={styles.countriesList}>
-        {
-          countriesList.map(country => {
-            return (
-              <li
-                key={country.name}
-                className={styles.countriesListItem}
-              >
-                <Card
-                  countryData={country}
-                  onClickHandler={() => console.log(country.name)}
-                />
-              </li>
-            );
-          })
-        }
-      </ul>
+      {countriesList.length
+        ? <ul className={styles.countriesList}>
+          {
+            countriesList.map(country => {
+              return (
+                <li
+                  key={country.name}
+                  className={styles.countriesListItem}
+                >
+                  <Card
+                    countryData={country}
+                    onClickHandler={() => console.log(country.name)}
+                  />
+                </li>
+              );
+            })
+          }
+        </ul>
+        : <h2>No data</h2>
+      }
+      <SnackBar
+        message={errorMessage}
+        duration={7000}
+        clearMsg={() => setErrorMessage('')}
+      />
     </>
   );
 };
