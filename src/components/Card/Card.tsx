@@ -30,11 +30,11 @@ const Card: FC<CardProps> = ({
     >
       <div
         className={styles.flagWrapper}
-        style={{ background: `var(--clr-ui) url(${imgBlank}) center / 20% no-repeat ` }}
+        style={{ background: `var(--clr-ui) url(${imgBlank}) center / 20% no-repeat` }}
       >
         <img
           className={styles.flagImg}
-          src={countryData.flags.png}
+          src={countryData.flags.svg}
           alt={`The flag of ${countryData.name}`}
           loading='lazy'
         />

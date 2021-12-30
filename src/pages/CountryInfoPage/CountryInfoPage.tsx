@@ -97,7 +97,7 @@ const CountryInfoPage: FC<CountryInfoPageProps> = () => {
           >
             <img
               className={styles.flagImg}
-              src={countryInfo.flags.png}
+              src={countryInfo.flags.svg}
               alt={`The flag of ${countryInfo.name}`}
               loading='lazy'
             />
