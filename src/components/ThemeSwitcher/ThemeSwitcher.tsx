@@ -21,8 +21,8 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({
     >
       <div className={styles.themeSwitcherIconWrapper}>
         <MoonIcon
-          width={20}
-          height={20}
+          width={18}
+          height={18}
           color='CurrentColor'
           isFilled={themeType === ThemeTypes.DARK}
         />

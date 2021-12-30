@@ -1,9 +1,10 @@
 .themeSwitcherWrapper {
   display: flex;
-  align-items: baseline;
-  gap: 0.6em;
+  align-items: center;
+  gap: 0.5em;
   cursor: pointer;
 }
+
 .themeSwitcherIconWrapper {
   line-height: 0;
 }
@@ -11,4 +12,11 @@
 .themeType {
   font-weight: var(--fw-normal);
   line-height: 0;
+}
+
+@media (max-width: 400px) {
+  .themeSwitcherWrapper,
+  .themeType {
+    font-size: var(--fs-sm);
+  }
 }

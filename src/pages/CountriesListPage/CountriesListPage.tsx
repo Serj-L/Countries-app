@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import {
   getAllCountriesFromAPI,
@@ -8,7 +8,13 @@ import {
 } from '../../api/api';
 import { LocalStorageKeys, RegionFilterOptions } from '../../types';
 
-import { Card, SearchForm, Filter, SnackBar } from '../../components';
+import {
+  Card,
+  SearchForm,
+  Filter,
+  SnackBar,
+  ScrollTop,
+} from '../../components';
 
 import styles from './CountriesListPage.module.css';
 
@@ -22,73 +28,80 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [filterValue, setFilterValue] = useState<string>(localStorage.getItem(LocalStorageKeys.FILTERVALUE) || RegionFilterOptions.ALLREGIONS);
 
-  const onSearch = (event: FormEvent) => {
-    const form = event.target as HTMLFormElement;
-    const input = form[0] as HTMLInputElement;
-    const searchValue: string = input.value.trim();
+  const onSearch = async (value: string) => {
+    if (!value && !searchValue) {
+      return;
+    }
+    if (value === searchValue) {
+      setErrorMessage('The current search request is the same as the previous one, please edit your request.');
+      return;
+    }
 
-    event.preventDefault();
-    setSearchValue(searchValue);
-    setFilterValue(RegionFilterOptions.ALLREGIONS);
-    localStorage.setItem(LocalStorageKeys.FILTERVALUE, RegionFilterOptions.ALLREGIONS);
+    try {
+      const response = value
+        ? await getCountriesByNameSearchFromAPI(value)
+        : await getAllCountriesFromAPI();
+
+      if (Array.isArray(response)) {
+        setCountriesList(response);
+        setSearchValue(value);
+
+        if (filterValue !== RegionFilterOptions.ALLREGIONS) {
+          setFilterValue(RegionFilterOptions.ALLREGIONS);
+          localStorage.setItem(LocalStorageKeys.FILTERVALUE, RegionFilterOptions.ALLREGIONS);
+        }
+      } else {
+        setErrorMessage('Country not found, please edit your search request.');
+      }
+    } catch (error) {
+      setErrorMessage(`${error}.`);
+    }
   };
-  const onResetSearch = () => {
-    setSearchValue('');
-  };
-  const onFilter = (value: string) => {
-    setFilterValue(value);
-    localStorage.setItem(LocalStorageKeys.FILTERVALUE, value);
-    setSearchValue('');
+  const onFilter = async (value: string) => {
+    try {
+      const response = value === RegionFilterOptions.ALLREGIONS
+        ? await getAllCountriesFromAPI()
+        : await getAllCountriesByRegionFilterFromAPI(value);
+
+      setCountriesList(response);
+      setFilterValue(value);
+      localStorage.setItem(LocalStorageKeys.FILTERVALUE, value);
+      if (searchValue) {
+        setSearchValue('');
+      }
+    } catch (error) {
+      setErrorMessage(`${error}.`);
+    }
   };
 
   useEffect(() => {
-    async function getAllCountries() {
+    async function getCountriesList() {
       try {
-        const response = await getAllCountriesFromAPI();
-        setCountriesList(response);
-      } catch (error) {
-        setErrorMessage(`${error}.`);
-      }
-    }
-    async function getCountriesByNameSearch() {
-      try {
-        const response = await getCountriesByNameSearchFromAPI(searchValue);
+        const response = filterValue === RegionFilterOptions.ALLREGIONS
+          ? await getAllCountriesFromAPI()
+          : await getAllCountriesByRegionFilterFromAPI(filterValue);
 
-        if (Array.isArray(response)) {
-          setCountriesList(response);
-        } else {
-          setErrorMessage('Country not found, please check your search request.');
-        }
-      } catch (error) {
-        setErrorMessage(`${error}.`);
-      }
-    }
-    async function getAllCountriesByRegionFilter() {
-      try {
-        const response = await getAllCountriesByRegionFilterFromAPI(filterValue);
         setCountriesList(response);
       } catch (error) {
         setErrorMessage(`${error}.`);
       }
     }
 
-    if (searchValue) {
-      getCountriesByNameSearch();
-    } else {
-      filterValue === RegionFilterOptions.ALLREGIONS
-        ? getAllCountries()
-        : getAllCountriesByRegionFilter();
-    }
-  }, [searchValue, filterValue]);
+    getCountriesList();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
+      <ScrollTop
+        triggerTopOffSet={350}
+      />
       <div className={styles.countriesListControls}>
         <SearchForm
           placeholder='Search for a country...'
-          submitedValue={searchValue}
+          actualSearchValue={searchValue}
+          isError={!!errorMessage}
           onSubmit={onSearch}
-          onReset={onResetSearch}
         />
         <Filter
           placeholder='Filter By Region'
@@ -116,7 +129,7 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
             })
           }
         </ul>
-        : <h2>No data</h2>
+        : <h2>No data :(</h2>
       }
       <SnackBar
         message={errorMessage}

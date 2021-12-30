@@ -1,9 +1,8 @@
-.SearchFormForm {
+.SearchForm {
   display: flex;
   align-items: center;
   gap: 1em;
-  flex-grow: 1;
-  max-width: 400px;
+  flex: 0 1 400px;
   height: var(--height-form-elements);
   background: var(--clr-ui);
   padding-inline: 1.5em;
@@ -19,6 +18,7 @@
 }
 
 .clearSearchBtn {
+  flex-shrink: 0;
   background: transparent;
   border: none;
   outline: none;

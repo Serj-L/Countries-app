@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, FormEvent } from 'react';
+import { FC, useState, useEffect } from 'react';
 
 import { SearchIcon, CrossIcon } from '..';
 
@@ -6,36 +6,43 @@ import styles from './SearchForm.module.css';
 
 interface SearchFormProps {
   placeholder?: string,
-  submitedValue: string,
-  onSubmit: (event: FormEvent) => void,
-  onReset: () => void,
+  actualSearchValue: string,
+  isError: boolean,
+  onSubmit: (value: string) => void,
 }
 
 const SearchForm: FC<SearchFormProps> = ({
   placeholder = 'Type search request here...',
-  submitedValue,
+  actualSearchValue,
+  isError,
   onSubmit,
-  onReset,
 }) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const onChangeHandler = (value: string) => {
     setInputValue(value);
   };
-  const onResetHandler = () => {
-    setInputValue('');
-    onReset();
+  const onReset = () => {
+    onSubmit('');
   };
 
   useEffect(() => {
-    setInputValue(submitedValue);
-  }, [submitedValue]);
+    if (isError) {
+      setInputValue(actualSearchValue);
+    } else {
+      setInputValue('');
+    }
+    setInputValue(actualSearchValue);
+  }, [actualSearchValue, isError]);
 
   return (
     <form
-      className={styles.SearchFormForm}
-      onSubmit={event => onSubmit(event)}
-      onReset={onResetHandler}
+      className={styles.SearchForm}
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSubmit(inputValue.trim());
+      }}
+      onReset={onReset}
     >
       <div className={styles.searchIconWrapper}>
         <SearchIcon

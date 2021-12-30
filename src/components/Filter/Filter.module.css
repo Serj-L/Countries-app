@@ -1,6 +1,5 @@
 .filterWrapper {
-  flex-grow: 1;
-  max-width: 200px;
+  flex: 0 1 200px;
 }
 
 .filterSelect {

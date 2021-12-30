@@ -51,3 +51,16 @@
   max-width: var(--max-width);
   margin: 0 auto;
 }
+
+/* adaptive */
+@media (max-width: 500px) {
+  .headerTitle {
+    font-size: var(--fs-lg);
+  }
+}
+
+@media (max-width: 400px) {
+  .headerTitle {
+    font-size: var(--fs-md);
+  }
+}
