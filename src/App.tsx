@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { LocalStorageKeys, ThemeTypes } from './types';
+import { LocalStorageKeys, ThemeTypes, RoutesEnum } from './types';
 import { AppRouter } from './router';
 import { ThemeSwitcher } from './components';
 
@@ -8,6 +9,8 @@ import styles from './App.module.css';
 
 function App() {
   const [themeType, setThemeType] = useState<ThemeTypes>(localStorage.getItem(LocalStorageKeys.THEMETYPE) as ThemeTypes || ThemeTypes.LIGHT);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleThemeType = () => {
     if (themeType === ThemeTypes.LIGHT) {
@@ -18,6 +21,12 @@ function App() {
       localStorage.setItem(LocalStorageKeys.THEMETYPE, ThemeTypes.LIGHT);
     }
   };
+  const navigateHome = () => {
+    if (location.pathname === RoutesEnum.COUNTRIESLIST) {
+      return;
+    }
+    navigate(RoutesEnum.COUNTRIESLIST);
+  };
 
   return (
     <div
@@ -26,7 +35,12 @@ function App() {
     >
       <header className={styles.header}>
         <div className={styles.headerContainer}>
-          <h1 className={styles.headerTitle}>Where in the World?</h1>
+          <h1
+            className={styles.headerTitle}
+            onClick={navigateHome}
+          >
+            Where in the World?
+          </h1>
           <ThemeSwitcher
             themeType={themeType}
             onClickHandler={toggleThemeType}

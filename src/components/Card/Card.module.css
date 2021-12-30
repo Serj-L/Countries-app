@@ -11,10 +11,19 @@
   transition: transform var(--transition-duration);
 }
 
-.flag {
+.flagWrapper {
   width: 100%;
-  height: 160px;
+  height: 170px;
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.flagImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .countryName {
@@ -26,16 +35,6 @@
   display: grid;
   grid-template-rows: 1fr auto;
   padding: 2em 1em;
-}
-
-.countryInfoTitle {
-  font-weight: var(--fw-normal);
-  line-height: 1.4;
-  margin: 0;
-}
-
-.countryInfoValue {
-  font-weight: var(--fw-light);
 }
 
 @media (hover: hover) and (pointer: fine) {

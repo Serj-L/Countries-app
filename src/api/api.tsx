@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-interface CountryName {
+export interface CountryName {
   name: string,
 }
 
@@ -15,8 +15,8 @@ export interface CountryDataInfo extends CountryDataList {
   nativeName: string,
   subregion: string,
   topLevelDomain: string[],
-  currencies: {code: string, name: string, symbol: string},
-  languages: {iso639_1: string, iso639_2: string, name: string, nativeName: string},
+  currencies: {code: string, name: string, symbol: string}[],
+  languages: {iso639_1: string, iso639_2: string, name: string, nativeName: string}[],
   borders: string[],
 }
 
@@ -47,14 +47,14 @@ export const getCountriesByNameSearchFromAPI = async (name: string): Promise<Cou
 };
 
 export const getCountryInfoFromAPI = async (name: string): Promise<CountryDataInfo[]> => {
-  const response = await axios.get(`${BASE_API_URL}name/${name}?fullText=true?fields=name,${FIELDS_COUNTRY_INFO.join(',')}`);
+  const response = await axios.get(`${BASE_API_URL}name/${name}?fullText=true&fields=name,${FIELDS_COUNTRY_INFO.join(',')}`);
   const data = await response.data;
 
   return data;
 };
 
 export const getCountriesNameByCodesFromAPI = async (codes: string[]): Promise<CountryName[]> => {
-  const response = await axios.get(`https://restcountries.com/v2/alpha?codes=${codes.join(',')}?fields=name,${FIELDS_BORDER_COUNTRIES_LIST.join(',')}`);
+  const response = await axios.get(`https://restcountries.com/v2/alpha?codes=${codes.join(',')}&fields=name,${FIELDS_BORDER_COUNTRIES_LIST.join(',')}`);
   const data = await response.data;
 
   return data;

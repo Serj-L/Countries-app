@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   getAllCountriesFromAPI,
@@ -27,6 +28,7 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [filterValue, setFilterValue] = useState<string>(localStorage.getItem(LocalStorageKeys.FILTERVALUE) || RegionFilterOptions.ALLREGIONS);
+  const navigate = useNavigate();
 
   const onSearch = async (value: string) => {
     if (!value && !searchValue) {
@@ -93,9 +95,6 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
 
   return (
     <>
-      <ScrollTop
-        triggerTopOffSet={350}
-      />
       <div className={styles.countriesListControls}>
         <SearchForm
           placeholder='Search for a country...'
@@ -122,15 +121,20 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
                 >
                   <Card
                     countryData={country}
-                    onClickHandler={() => console.log(country.name)}
+                    onClickHandler={() => navigate(`/${country.name}`)}
                   />
                 </li>
               );
             })
           }
         </ul>
-        : <h2>No data :(</h2>
+        : <h2 className={styles.noDataTitle}>No data :(</h2>
       }
+
+      <ScrollTop
+        triggerTopOffSet={350}
+      />
+
       <SnackBar
         message={errorMessage}
         duration={7000}

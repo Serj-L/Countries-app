@@ -2,6 +2,8 @@ import { FC } from 'react';
 
 import { CountryDataList } from '../../api/api';
 
+import { InfoItem } from '..';
+
 import imgBlank from '../../images/file-image-regular.svg';
 
 import styles from './Card.module.css';
@@ -27,16 +29,30 @@ const Card: FC<CardProps> = ({
       }}
     >
       <div
-        className={styles.flag}
-        style={{ background: `url(${countryData.flags.svg}) center left / cover no-repeat, var(--clr-ui) url(${imgBlank}) center / 20% no-repeat ` }}
+        className={styles.flagWrapper}
+        style={{ background: `var(--clr-ui) url(${imgBlank}) center / 20% no-repeat ` }}
       >
-
+        <img
+          className={styles.flagImg}
+          src={countryData.flags.png}
+          alt={`The flag of ${countryData.name}`}
+          loading='lazy'
+        />
       </div>
       <div className={styles.countryInfoWrapper}>
         <h2 className={styles.countryName}>{countryData.name}</h2>
-        <p className={styles.countryInfoTitle}>Population: <span className={styles.countryInfoValue}>{countryData.population.toLocaleString('en-EN') || 'n/a'}</span></p>
-        <p className={styles.countryInfoTitle}>Region: <span className={styles.countryInfoValue}>{countryData.region || 'n/a'}</span></p>
-        <p className={styles.countryInfoTitle}>Capital: <span className={styles.countryInfoValue}>{countryData.capital || 'n/a'}</span></p>
+        <InfoItem
+          title='population'
+          value={countryData.population}
+        />
+        <InfoItem
+          title='region'
+          value={countryData.region}
+        />
+        <InfoItem
+          title='capital'
+          value={countryData.capital}
+        />
       </div>
     </div>
   );

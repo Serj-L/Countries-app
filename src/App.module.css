@@ -40,11 +40,12 @@
 .headerTitle {
   font-size: var(--fs-xl);
   margin: 0;
+  cursor: pointer;
 }
 
 /* main styles */
 .main {
-  padding: 1.5em 1em;
+  padding: 0 1em 1.5em;
 }
 
 .mainContainer {

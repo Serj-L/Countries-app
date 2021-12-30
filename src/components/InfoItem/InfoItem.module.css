@@ -1,0 +1,13 @@
+.countryInfoTitle {
+  display: flex;
+  gap: 0.2em;
+  font-weight: var(--fw-normal);
+  line-height: 1.4;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.countryInfoValue {
+  font-weight: var(--fw-light);
+  white-space: normal;
+}

@@ -6,7 +6,7 @@ export enum ThemeTypes {
 
 export enum RoutesEnum {
   COUNTRIESLIST = '/',
-  CONTRYINFO = '/info',
+  CONTRYINFO = ':countryName',
   REDIRECTPATH = '/',
 }
 
