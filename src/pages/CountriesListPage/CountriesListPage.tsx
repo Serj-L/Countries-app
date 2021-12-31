@@ -15,6 +15,8 @@ import {
   Filter,
   SnackBar,
   ScrollTop,
+  NoData,
+  Loader,
 } from '../../components';
 
 import styles from './CountriesListPage.module.css';
@@ -27,6 +29,7 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
   const [countriesList, setCountriesList] = useState<CountryDataList[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
+  const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
   const [filterValue, setFilterValue] = useState<string>(localStorage.getItem(LocalStorageKeys.FILTERVALUE) || RegionFilterOptions.ALLREGIONS);
   const navigate = useNavigate();
 
@@ -79,6 +82,8 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
   useEffect(() => {
     async function getCountriesList() {
       try {
+        setIsFetchingData(true);
+
         const response = filterValue === RegionFilterOptions.ALLREGIONS
           ? await getAllCountriesFromAPI()
           : await getAllCountriesByRegionFilterFromAPI(filterValue);
@@ -86,6 +91,8 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
         setCountriesList(response);
       } catch (error) {
         setErrorMessage(`${error}.`);
+      } finally {
+        setIsFetchingData(false);
       }
     }
 
@@ -128,7 +135,9 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
             })
           }
         </ul>
-        : <h2 className={styles.noDataTitle}>No data :(</h2>
+        : isFetchingData
+          ? <Loader/>
+          : <NoData/>
       }
 
       <ScrollTop

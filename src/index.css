@@ -19,11 +19,18 @@
   --clr-txt-light: hsl(200, 15%, 8%);
   --clr-ui-light: hsl(0, 0%, 100%);
   --clr-placeholder-light: hsl(0, 0%, 52%);
+  --clr-loader-first-light: hsl(209, 23%, 22%);
+  --clr-loader-second-light: hsl(0, 0%, 52%);
 
   --clr-bg-dark: hsl(207, 26%, 17%);
   --clr-txt-dark: hsl(0, 0%, 100%);
   --clr-ui-dark: hsl(209, 23%, 22%);
   --clr-placeholder-dark: hsl(0, 0%, 100%);
+  --clr-loader-first-dark: hsl(0, 0%, 52%);
+  --clr-loader-second-dark: hsl(209, 23%, 22%);
+
+  --clr-loader-first: hsl(209, 23%, 22%);
+  --clr-loader-second: hsl(0, 0%, 52%);
 
   /* other */
   --radius: 6px;

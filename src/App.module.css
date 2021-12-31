@@ -4,6 +4,8 @@
   --clr-bg: var(--clr-bg-light);
   --clr-ui: var(--clr-ui-light);
   --clr-placeholder: var(--clr-placeholder-light);
+  --clr-loader-first: var(--clr-loader-first-light);
+  --clr-loader-second: var(--clr-loader-second-light);
 }
 
 .App[data-theme-type='dark'] {
@@ -11,6 +13,8 @@
   --clr-bg: var(--clr-bg-dark);
   --clr-ui: var(--clr-ui-dark);
   --clr-placeholder: var(--clr-placeholder-dark);
+  --clr-loader-first: var(--clr-loader-first-dark);
+  --clr-loader-second: var(--clr-loader-second-dark);
 }
 
 .App {

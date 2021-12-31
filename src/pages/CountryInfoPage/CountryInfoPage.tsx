@@ -11,6 +11,8 @@ import {
   InfoItem,
   SnackBar,
   ArrowIcon,
+  Loader,
+  NoData,
 } from '../../components';
 
 import imgBlank from '../../images/file-image-regular.svg';
@@ -22,6 +24,7 @@ interface CountryInfoPageProps {}
 const CountryInfoPage: FC<CountryInfoPageProps> = () => {
   const [countryInfo, setCountryInfo] = useState<CountryDataInfo>();
   const [borderCountriesNames, setBorderCountriesNames] = useState<string[]>([]);
+  const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const { countryName } = useParams();
   const navigate = useNavigate();
@@ -39,12 +42,16 @@ const CountryInfoPage: FC<CountryInfoPageProps> = () => {
       }
 
       try {
+        setIsFetchingData(true);
+
         const response = await getCountryInfoFromAPI(countryName);
 
         setCountryInfo(response[0]);
       } catch (error) {
         setErrorMessage(`${error}.`);
         console.log(error);
+      } finally {
+        setIsFetchingData(false);
       }
     }
 
@@ -74,97 +81,103 @@ const CountryInfoPage: FC<CountryInfoPageProps> = () => {
   }, [countryInfo]);
 
   return (
-    !countryInfo
-      ? <h2 className={styles.noDataTitle}>No data :(</h2>
-      : <>
-        <div className={styles.countryInfoControlsWrapper}>
-          <button
-            className={styles.goBackBtn}
-            onClick={goBack}
-          >
-            <ArrowIcon
-              width={16}
-              height={16}
-              color='currentColor'
-            />
-            <span>Back</span>
-          </button>
-        </div>
-        <div className={styles.countryInfoWrapper}>
-          <div
-            className={styles.flagWrapper}
-            style={{ background: `var(--clr-ui) url(${imgBlank}) center / 20% no-repeat` }}
-          >
-            <img
-              className={styles.flagImg}
-              src={countryInfo.flags.svg}
-              alt={`The flag of ${countryInfo.name}`}
-              loading='lazy'
-            />
-          </div>
-          <div className={styles.countryInfoContentWrapper}>
-            <h2 className={styles.countryName}>{countryInfo.name}</h2>
-            <div className={styles.infoWrapper}>
-              <InfoItem
-                title='native name'
-                value={countryInfo.nativeName}
-              />
-              <InfoItem
-                title='population'
-                value={countryInfo.population}
-              />
-              <InfoItem
-                title='region'
-                value={countryInfo.region}
-              />
-              <InfoItem
-                title='sub region'
-                value={countryInfo.subregion}
-              />
-              <InfoItem
-                title='capital'
-                value={countryInfo.capital}
-              />
-              <InfoItem
-                title='top level domain'
-                value={countryInfo.topLevelDomain.join(', ')}
-              />
-              <InfoItem
-                title='currencies'
-                value={countryInfo.currencies.map(currency => currency.name).join(', ')}
-              />
-              <InfoItem
-                title='languages'
-                value={countryInfo.languages.map(language => language.name).join(', ')}
-              />
+    <>
+      <SnackBar
+        message={errorMessage}
+        duration={7000}
+        clearMsg={() => setErrorMessage('')}
+      />
+      {
+        countryInfo
+          ? <>
+            <div className={styles.countryInfoControlsWrapper}>
+              <button
+                className={styles.goBackBtn}
+                onClick={goBack}
+              >
+                <ArrowIcon
+                  width={16}
+                  height={16}
+                  color='currentColor'
+                />
+                <span>Back</span>
+              </button>
             </div>
-            <div className={styles.borderCountriesNamesWrapper}>
-              <h3 className={styles.borderCountriesTitle}>Border Countries:</h3>
-              <div className={styles.borderCountriesLinksWrapper}>
-                {borderCountriesNames.length
-                  ? borderCountriesNames.map(name => {
-                    return (
-                      <Link
-                        key={name}
-                        className={styles.borderCountryLink}
-                        to={`/${name}`}
-                      >
-                        {name}
-                      </Link>
-                    );
-                  })
-                  : <span>There are no border countries</span>
-                }
+            <div className={styles.countryInfoWrapper}>
+              <div
+                className={styles.flagWrapper}
+                style={{ background: `var(--clr-ui) url(${imgBlank}) center / 20% no-repeat` }}
+              >
+                <img
+                  className={styles.flagImg}
+                  src={countryInfo.flags.svg}
+                  alt={`The flag of ${countryInfo.name}`}
+                  loading='lazy'
+                />
+              </div>
+              <div className={styles.countryInfoContentWrapper}>
+                <h2 className={styles.countryName}>{countryInfo.name}</h2>
+                <div className={styles.infoWrapper}>
+                  <InfoItem
+                    title='native name'
+                    value={countryInfo.nativeName}
+                  />
+                  <InfoItem
+                    title='population'
+                    value={countryInfo.population}
+                  />
+                  <InfoItem
+                    title='region'
+                    value={countryInfo.region}
+                  />
+                  <InfoItem
+                    title='sub region'
+                    value={countryInfo.subregion}
+                  />
+                  <InfoItem
+                    title='capital'
+                    value={countryInfo.capital}
+                  />
+                  <InfoItem
+                    title='top level domain'
+                    value={countryInfo.topLevelDomain?.join(', ')}
+                  />
+                  <InfoItem
+                    title='currencies'
+                    value={countryInfo.currencies?.map(currency => currency.name)?.join(', ')}
+                  />
+                  <InfoItem
+                    title='languages'
+                    value={countryInfo.languages?.map(language => language.name)?.join(', ')}
+                  />
+                </div>
+                <div className={styles.borderCountriesNamesWrapper}>
+                  <h3 className={styles.borderCountriesTitle}>Border Countries:</h3>
+                  <div className={styles.borderCountriesLinksWrapper}>
+                    {borderCountriesNames.length
+                      ? borderCountriesNames.map(name => {
+                        return (
+                          <Link
+                            key={name}
+                            className={styles.borderCountryLink}
+                            to={`/${name}`}
+                          >
+                            {name}
+                          </Link>
+                        );
+                      })
+                      : <span>There are no border countries</span>
+                    }
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <SnackBar
-          message={errorMessage}
-          duration={7000}
-          clearMsg={() => setErrorMessage('')}
-        />
-      </>
+          </>
+          : isFetchingData
+            ? <Loader/>
+            : <NoData/>
+      }
+    </>
   );
 };
 

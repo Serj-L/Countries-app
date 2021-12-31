@@ -5,6 +5,8 @@ export { default as SearchForm } from './SearchForm/SearchForm';
 export { default as Filter } from './Filter/Filter';
 export { default as SnackBar } from './SnackBar/SnackBar';
 export { default as ScrollTop } from './ScrollTop/ScrollTop';
+export { default as NoData } from './NoData/NoData';
+export { default as Loader } from './Loader/Loader';
 export { default as MoonIcon } from './icons/MoonIcon';
 export { default as SearchIcon } from './icons/SearchIcon';
 export { default as CrossIcon } from './icons/CrossIcon';
