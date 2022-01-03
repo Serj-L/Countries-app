@@ -1,14 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { LocalStorageKeys, ThemeTypes, RoutesEnum } from './types';
+import {
+  getAllCountriesFromAPI,
+  getCountriesByNameSearchFromAPI,
+  getAllCountriesByRegionFilterFromAPI,
+  CountryDataList,
+} from './api/api';
+import {
+  LocalStorageKeys,
+  ThemeTypes,
+  RoutesEnum,
+  RegionFilterOptions,
+} from './types';
 import { AppRouter } from './router';
-import { ThemeSwitcher } from './components';
+
+import {
+  ThemeSwitcher,
+  Loader,
+  NoData,
+  SnackBar,
+} from './components';
 
 import styles from './App.module.css';
 
 function App() {
   const [themeType, setThemeType] = useState<ThemeTypes>(localStorage.getItem(LocalStorageKeys.THEMETYPE) as ThemeTypes || ThemeTypes.LIGHT);
+  const [countriesList, setCountriesList] = useState<CountryDataList[]>([]);
+  const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -27,6 +47,31 @@ function App() {
     }
     navigate(RoutesEnum.COUNTRIESLIST);
   };
+
+  useEffect(() => {
+    async function getCountriesList() {
+      try {
+        const filterValue = localStorage.getItem(LocalStorageKeys.FILTERVALUE) || RegionFilterOptions.ALLREGIONS;
+        const searchValue = localStorage.getItem(LocalStorageKeys.SEARCHVALUE) || '';
+        setIsFetchingData(true);
+
+        const response = filterValue === RegionFilterOptions.ALLREGIONS && !searchValue
+          ? await getAllCountriesFromAPI()
+          : searchValue
+            ? await getCountriesByNameSearchFromAPI(searchValue)
+            : await getAllCountriesByRegionFilterFromAPI(filterValue);
+
+        setCountriesList(response);
+      } catch (error) {
+        setErrorMessage(`${error}.`);
+      } finally {
+        setIsFetchingData(false);
+      }
+    }
+
+    getCountriesList();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div
@@ -49,9 +94,23 @@ function App() {
       </header>
       <main className={styles.main}>
         <div className={styles.mainContainer}>
-          <AppRouter />
+          {countriesList.length
+            ? <AppRouter
+              countriesList={countriesList}
+              setCountriesList={setCountriesList}
+              setErrorMessage={setErrorMessage}
+            />
+            : isFetchingData
+              ? <Loader/>
+              : <NoData/>
+          }
         </div>
       </main>
+      <SnackBar
+        message={errorMessage}
+        duration={7000}
+        clearMsg={() => setErrorMessage('')}
+      />
     </div>
   );
 }

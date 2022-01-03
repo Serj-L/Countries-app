@@ -7,34 +7,41 @@ import {
   getCountriesByNameSearchFromAPI,
   getAllCountriesByRegionFilterFromAPI,
 } from '../../api/api';
-import { LocalStorageKeys, RegionFilterOptions } from '../../types';
+import {
+  LocalStorageKeys,
+  RegionFilterOptions,
+} from '../../types';
 
 import {
   Card,
   SearchForm,
   Filter,
-  SnackBar,
   ScrollTop,
-  NoData,
-  Loader,
 } from '../../components';
 
 import styles from './CountriesListPage.module.css';
 
-interface CountriesListPageProps {}
+interface CountriesListPageProps {
+  countriesList: CountryDataList[],
+  setCountriesList: (countriesList: CountryDataList[]) => void,
+  setErrorMessage: (message: string) => void,
+}
 
 const filterOptions: string[] = Object.values(RegionFilterOptions).filter(option => option !== RegionFilterOptions.ALLREGIONS);
 
-const CountriesListPage: FC<CountriesListPageProps> = () => {
-  const [countriesList, setCountriesList] = useState<CountryDataList[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
+const CountriesListPage: FC<CountriesListPageProps> = ({
+  countriesList,
+  setCountriesList,
+  setErrorMessage,
+}) => {
+  const [searchValue, setSearchValue] = useState<string>(localStorage.getItem(LocalStorageKeys.SEARCHVALUE) || '');
+  const [isChangeSearchInputValue, setIsChangeSearchInputValue] = useState<boolean>(true);
   const [filterValue, setFilterValue] = useState<string>(localStorage.getItem(LocalStorageKeys.FILTERVALUE) || RegionFilterOptions.ALLREGIONS);
   const navigate = useNavigate();
 
   const onSearch = async (value: string) => {
     if (!value && !searchValue) {
+      setIsChangeSearchInputValue(true);
       return;
     }
     if (value === searchValue) {
@@ -50,6 +57,8 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
       if (Array.isArray(response)) {
         setCountriesList(response);
         setSearchValue(value);
+        localStorage.setItem(LocalStorageKeys.SEARCHVALUE, value);
+        setIsChangeSearchInputValue(true);
 
         if (filterValue !== RegionFilterOptions.ALLREGIONS) {
           setFilterValue(RegionFilterOptions.ALLREGIONS);
@@ -60,6 +69,7 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
       }
     } catch (error) {
       setErrorMessage(`${error}.`);
+      setIsChangeSearchInputValue(true);
     }
   };
   const onFilter = async (value: string) => {
@@ -73,6 +83,8 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
       localStorage.setItem(LocalStorageKeys.FILTERVALUE, value);
       if (searchValue) {
         setSearchValue('');
+        localStorage.setItem(LocalStorageKeys.SEARCHVALUE, '');
+        setIsChangeSearchInputValue(true);
       }
     } catch (error) {
       setErrorMessage(`${error}.`);
@@ -80,25 +92,13 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
   };
 
   useEffect(() => {
-    async function getCountriesList() {
-      try {
-        setIsFetchingData(true);
-
-        const response = filterValue === RegionFilterOptions.ALLREGIONS
-          ? await getAllCountriesFromAPI()
-          : await getAllCountriesByRegionFilterFromAPI(filterValue);
-
-        setCountriesList(response);
-      } catch (error) {
-        setErrorMessage(`${error}.`);
-      } finally {
-        setIsFetchingData(false);
-      }
+    if (!isChangeSearchInputValue) {
+      return;
     }
-
-    getCountriesList();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setTimeout(() => {
+      setIsChangeSearchInputValue(false);
+    }, 0);
+  }, [isChangeSearchInputValue]);
 
   return (
     <>
@@ -106,7 +106,7 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
         <SearchForm
           placeholder='Search for a country...'
           actualSearchValue={searchValue}
-          isError={!!errorMessage}
+          isChangeSearchInputValue={isChangeSearchInputValue}
           onSubmit={onSearch}
         />
         <Filter
@@ -117,37 +117,26 @@ const CountriesListPage: FC<CountriesListPageProps> = () => {
           onChange={onFilter}
         />
       </div>
-      {countriesList.length
-        ? <ul className={styles.countriesList}>
-          {
-            countriesList.map(country => {
-              return (
-                <li
-                  key={country.name}
-                  className={styles.countriesListItem}
-                >
-                  <Card
-                    countryData={country}
-                    onClickHandler={() => navigate(`/${country.name}`)}
-                  />
-                </li>
-              );
-            })
-          }
-        </ul>
-        : isFetchingData
-          ? <Loader/>
-          : <NoData/>
-      }
+      <ul className={styles.countriesList}>
+        {
+          countriesList.map(country => {
+            return (
+              <li
+                key={country.name}
+                className={styles.countriesListItem}
+              >
+                <Card
+                  countryData={country}
+                  onClickHandler={() => navigate(`/${country.name}`)}
+                />
+              </li>
+            );
+          })
+        }
+      </ul>
 
       <ScrollTop
         triggerTopOffSet={350}
-      />
-
-      <SnackBar
-        message={errorMessage}
-        duration={7000}
-        clearMsg={() => setErrorMessage('')}
       />
     </>
   );

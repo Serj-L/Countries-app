@@ -13,6 +13,7 @@ export enum RoutesEnum {
 export enum LocalStorageKeys {
   THEMETYPE = 'ContriesAppThemeType',
   FILTERVALUE = 'ContriesAppFilterValue',
+  SEARCHVALUE = 'ContriesAppSearchValue',
 }
 
 export enum RegionFilterOptions {
