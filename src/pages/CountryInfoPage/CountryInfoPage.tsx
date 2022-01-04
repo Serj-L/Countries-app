@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 
 import {
   getCountryInfoFromAPI,
@@ -17,11 +17,6 @@ import imgBlank from '../../images/file-image-regular.svg';
 
 import styles from './CountryInfoPage.module.css';
 
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-  });
-};
 interface CountryInfoPageProps {
   setErrorMessage: (message: string) => void,
 }
@@ -32,15 +27,21 @@ const CountryInfoPage: FC<CountryInfoPageProps> = ({
   const [countryInfo, setCountryInfo] = useState<CountryDataInfo>();
   const [prevCountryName, setPrevCountryName] = useState<string>('');
   const [borderCountriesNames, setBorderCountriesNames] = useState<string[]>([]);
-  const [isFetchingCountryInfoData, setIsFetchingCountryInfoData] = useState<boolean>(false);
+  const [isFetchingCountryInfo, setIsFetchingCountryInfo] = useState<boolean>(true);
+  const { pathname } = useLocation();
   const { countryName } = useParams();
   const navigate = useNavigate();
 
   const goBack = () => navigate(-1);
 
   useEffect(() => {
-    scrollToTop();
+    if (!document.documentElement.scrollTop) {
+      return;
+    }
+    document.documentElement.scrollTo(0, 0);
+  }, [pathname]);
 
+  useEffect(() => {
     if (!countryName || prevCountryName === countryName) {
       return;
     }
@@ -48,7 +49,9 @@ const CountryInfoPage: FC<CountryInfoPageProps> = ({
     async function getCountryInfo() {
       if (countryName) {
         try {
-          setIsFetchingCountryInfoData(true);
+          if (!isFetchingCountryInfo) {
+            setIsFetchingCountryInfo(true);
+          }
 
           const response = await getCountryInfoFromAPI(countryName);
 
@@ -61,7 +64,7 @@ const CountryInfoPage: FC<CountryInfoPageProps> = ({
 
           setErrorMessage(`${error}.`);
         } finally {
-          setIsFetchingCountryInfoData(false);
+          setIsFetchingCountryInfo(false);
         }
       }
     }
@@ -170,6 +173,7 @@ const CountryInfoPage: FC<CountryInfoPageProps> = ({
                           key={name}
                           className={styles.borderCountryLink}
                           to={`/${name}`}
+                          onClick={event => event.currentTarget.blur()}
                         >
                           {name}
                         </Link>
@@ -182,7 +186,7 @@ const CountryInfoPage: FC<CountryInfoPageProps> = ({
             </div>
           </div>
         </>
-        : isFetchingCountryInfoData
+        : isFetchingCountryInfo
           ? <Loader/>
           : <NoData/>
       }

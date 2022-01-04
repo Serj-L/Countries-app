@@ -8,13 +8,21 @@ interface SearchFormProps {
   placeholder?: string,
   actualSearchValue: string,
   isChangeSearchInputValue: boolean,
+  isSearching: boolean,
   onSubmit: (value: string) => void,
 }
+
+const detectTouchDevice = (): boolean => {
+  const devices = new RegExp('Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini', 'i');
+
+  return devices.test(navigator.userAgent);
+};
 
 const SearchForm: FC<SearchFormProps> = ({
   placeholder = 'Type search request here...',
   actualSearchValue,
   isChangeSearchInputValue,
+  isSearching,
   onSubmit,
 }) => {
   const [inputValue, setInputValue] = useState<string>('');
@@ -24,6 +32,14 @@ const SearchForm: FC<SearchFormProps> = ({
   };
   const onSubmitHandler = (event: FormEvent) => {
     event.preventDefault();
+
+    if (detectTouchDevice()) {
+      const form = event.target as HTMLFormElement;
+      const input = form[0] as HTMLInputElement;
+
+      input.blur();
+    }
+
     onSubmit(inputValue.trim());
   };
   const onResetHandler = () => {
@@ -44,11 +60,20 @@ const SearchForm: FC<SearchFormProps> = ({
       onReset={onResetHandler}
     >
       <div className={styles.searchIconWrapper}>
-        <SearchIcon
-          width={20}
-          height={20}
-          color='currentColor'
-        />
+        {isSearching
+          ? <div
+            className={styles.loader}
+            style={{ width: 20, height: 20 }}
+          >
+            <div className={styles.circleOne}></div>
+            <div className={styles.circleTwo}></div>
+          </div>
+          : <SearchIcon
+            width={20}
+            height={20}
+            color='currentColor'
+          />
+        }
       </div>
       <input
         className={styles.searchInput}

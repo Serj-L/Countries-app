@@ -2,11 +2,16 @@ import { FC } from 'react';
 
 import styles from './Loader.module.css';
 
-interface LoaderProps {}
+interface LoaderProps {
+  paddingTop?: number,
+}
 
-const Loader: FC<LoaderProps> = () => {
+const Loader: FC<LoaderProps> = ({ paddingTop = 0 }) => {
   return (
-    <div className={styles.loaderWrapper}>
+    <div
+      className={styles.loaderWrapper}
+      style={{ paddingTop: paddingTop }}
+    >
       <svg className={styles.gegga}>
         <defs>
           <filter id="gegga">

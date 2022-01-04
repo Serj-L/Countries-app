@@ -27,7 +27,7 @@ import styles from './App.module.css';
 function App() {
   const [themeType, setThemeType] = useState<ThemeTypes>(localStorage.getItem(LocalStorageKeys.THEMETYPE) as ThemeTypes || ThemeTypes.LIGHT);
   const [countriesList, setCountriesList] = useState<CountryDataList[]>([]);
-  const [isFetchingData, setIsFetchingData] = useState<boolean>(false);
+  const [isFetchingData, setIsFetchingData] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const location = useLocation();
   const navigate = useNavigate();
@@ -53,7 +53,10 @@ function App() {
       try {
         const filterValue = localStorage.getItem(LocalStorageKeys.FILTERVALUE) || RegionFilterOptions.ALLREGIONS;
         const searchValue = localStorage.getItem(LocalStorageKeys.SEARCHVALUE) || '';
-        setIsFetchingData(true);
+
+        if (!isFetchingData) {
+          setIsFetchingData(true);
+        }
 
         const response = filterValue === RegionFilterOptions.ALLREGIONS && !searchValue
           ? await getAllCountriesFromAPI()
@@ -101,7 +104,7 @@ function App() {
               setErrorMessage={setErrorMessage}
             />
             : isFetchingData
-              ? <Loader/>
+              ? <Loader paddingTop={60} />
               : <NoData/>
           }
         </div>

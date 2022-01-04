@@ -103,6 +103,17 @@
     grid-template-columns: minmax(auto, 700px);
     gap: 4em;
   }
+
+  .flagWrapper {
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .flagWrapper {
+    justify-self: center;
+    max-width: 500px;
+  }
 }
 
 @media (max-width: 592px) {

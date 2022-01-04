@@ -36,7 +36,9 @@ const CountriesListPage: FC<CountriesListPageProps> = ({
 }) => {
   const [searchValue, setSearchValue] = useState<string>(localStorage.getItem(LocalStorageKeys.SEARCHVALUE) || '');
   const [isChangeSearchInputValue, setIsChangeSearchInputValue] = useState<boolean>(true);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
   const [filterValue, setFilterValue] = useState<string>(localStorage.getItem(LocalStorageKeys.FILTERVALUE) || RegionFilterOptions.ALLREGIONS);
+  const [isFiltering, setIsFiltering] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const onSearch = async (value: string) => {
@@ -50,6 +52,8 @@ const CountriesListPage: FC<CountriesListPageProps> = ({
     }
 
     try {
+      setIsSearching(true);
+
       const response = value
         ? await getCountriesByNameSearchFromAPI(value)
         : await getAllCountriesFromAPI();
@@ -70,10 +74,14 @@ const CountriesListPage: FC<CountriesListPageProps> = ({
     } catch (error) {
       setErrorMessage(`${error}.`);
       setIsChangeSearchInputValue(true);
+    } finally {
+      setIsSearching(false);
     }
   };
   const onFilter = async (value: string) => {
     try {
+      setIsFiltering(true);
+
       const response = value === RegionFilterOptions.ALLREGIONS
         ? await getAllCountriesFromAPI()
         : await getAllCountriesByRegionFilterFromAPI(value);
@@ -88,6 +96,8 @@ const CountriesListPage: FC<CountriesListPageProps> = ({
       }
     } catch (error) {
       setErrorMessage(`${error}.`);
+    } finally {
+      setIsFiltering(false);
     }
   };
 
@@ -107,6 +117,7 @@ const CountriesListPage: FC<CountriesListPageProps> = ({
           placeholder='Search for a country...'
           actualSearchValue={searchValue}
           isChangeSearchInputValue={isChangeSearchInputValue}
+          isSearching={isSearching}
           onSubmit={onSearch}
         />
         <Filter
@@ -114,6 +125,7 @@ const CountriesListPage: FC<CountriesListPageProps> = ({
           allValuesPlaceholder={RegionFilterOptions.ALLREGIONS}
           optionsList={filterOptions}
           selectedValue={filterValue}
+          isFiltering={isFiltering}
           onChange={onFilter}
         />
       </div>

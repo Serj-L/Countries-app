@@ -1,4 +1,5 @@
 .filterWrapper {
+  position: relative;
   flex: 0 1 200px;
 }
 
@@ -14,4 +15,46 @@
   box-shadow: var(--shadow);
   outline: none;
   cursor: pointer;
+}
+
+/* loader */
+.filterLoader {
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2em;
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 2px;
+}
+
+.filterLoader > div {
+  width: 0.8em;
+  aspect-ratio: 1;
+  background-color: var(--clr-placeholder);
+
+  border-radius: 50%;
+  display: inline-block;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.filterLoader .circleThree {
+  animation-delay: -0.32s;
+}
+
+.filterLoader .circleTwo {
+  animation-delay: -0.16s;
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    transform: scale(0);
+  } 40% {
+    transform: scale(1.0);
+  }
 }

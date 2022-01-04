@@ -7,6 +7,7 @@ interface FilterProps {
   allValuesPlaceholder: string,
   optionsList: string[],
   selectedValue: string,
+  isFiltering: boolean,
   onChange: (value: string) => void,
 }
 
@@ -15,10 +16,17 @@ const Filter: FC<FilterProps> = ({
   allValuesPlaceholder,
   optionsList,
   selectedValue,
+  isFiltering,
   onChange,
 }) => {
   return (
     <div className={styles.filterWrapper}>
+      {isFiltering && <div className={styles.filterLoader}>
+        <div className={styles.circleOne}></div>
+        <div className={styles.circleTwo}></div>
+        <div className={styles.circleThree}></div>
+      </div>
+      }
       <select
         className={styles.filterSelect}
         onChange={event => onChange(event.target.value)}
