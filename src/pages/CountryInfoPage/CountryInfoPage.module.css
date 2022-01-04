@@ -109,7 +109,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px), (max-height: 500px) {
   .flagWrapper {
     justify-self: center;
     max-width: 500px;
@@ -117,20 +117,22 @@
 }
 
 @media (max-width: 592px) {
+  .infoWrapper,
+  .borderCountriesNamesWrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 592px), (max-height: 500px) {
   .countryInfoControlsWrapper {
-    padding-block: 2.5em;
+    padding-block: 2em;
   }
 
   .countryInfoWrapper {
     gap: 1em;
   }
 
-  .infoWrapper {
-    grid-template-columns: 1fr;
-  }
-
   .borderCountriesNamesWrapper {
-    grid-template-columns: 1fr;
     gap: 1.5em;
     padding: 2.2em 0 1em;
   }
