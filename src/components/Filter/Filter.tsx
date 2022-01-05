@@ -31,6 +31,7 @@ const Filter: FC<FilterProps> = ({
         className={styles.filterSelect}
         onChange={event => onChange(event.target.value)}
         value={selectedValue === allValuesPlaceholder ? 'placeholder' : selectedValue}
+        aria-label={placeholder}
       >
         <option
           value='placeholder'

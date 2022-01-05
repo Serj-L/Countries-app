@@ -103,10 +103,6 @@
     grid-template-columns: minmax(auto, 700px);
     gap: 4em;
   }
-
-  .flagWrapper {
-    aspect-ratio: 2 / 1;
-  }
 }
 
 @media (max-width: 768px), (max-height: 500px) {

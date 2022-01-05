@@ -17,12 +17,11 @@ const ScrollTop: FC<ScrollTopProps> = ({ triggerTopOffSet }) => {
   const [isScrollingDown, setScrollingDown] = useState<boolean>(false);
 
   useEffect(() => {
-    const onScroll = (event: Event) => {
-      const target = event.target as Document;
-
-      setScrollingDown(target.documentElement.scrollTop > triggerTopOffSet);
+    const onScroll = () => {
+      setScrollingDown(document.documentElement.scrollTop > triggerTopOffSet);
     };
 
+    onScroll();
     window.addEventListener('scroll', onScroll);
 
     return () => window.removeEventListener('scroll', onScroll);

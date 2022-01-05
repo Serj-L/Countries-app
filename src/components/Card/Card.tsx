@@ -20,7 +20,7 @@ const Card: FC<CardProps> = ({
   return (
     <div
       className={styles.cardContainer}
-      tabIndex={1}
+      tabIndex={0}
       onClick={onClickHandler}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {

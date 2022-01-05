@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-globals */
 import { FC, useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 
 import {
   getCountryInfoFromAPI,
@@ -28,20 +29,22 @@ const CountryInfoPage: FC<CountryInfoPageProps> = ({
   const [prevCountryName, setPrevCountryName] = useState<string>('');
   const [borderCountriesNames, setBorderCountriesNames] = useState<string[]>([]);
   const [isFetchingCountryInfo, setIsFetchingCountryInfo] = useState<boolean>(true);
-  const { pathname } = useLocation();
   const { countryName } = useParams();
   const navigate = useNavigate();
 
   const goBack = () => navigate(-1);
 
   useEffect(() => {
-    if (!document.documentElement.scrollTop) {
-      return;
+    if (history.scrollRestoration) {
+      history.scrollRestoration = 'manual';
     }
-    document.documentElement.scrollTo(0, 0);
-  }, [pathname]);
+  }, []);
 
   useEffect(() => {
+    if (document.documentElement.scrollTop) {
+      document.documentElement.scrollTo(0, 0);
+    }
+
     if (!countryName || prevCountryName === countryName) {
       return;
     }

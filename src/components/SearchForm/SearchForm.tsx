@@ -85,6 +85,7 @@ const SearchForm: FC<SearchFormProps> = ({
         onChange={event => onChangeHandler(event.currentTarget.value)}
       />
       <button
+        title='Reset or clear search request'
         className={styles.clearSearchBtn}
         type='reset'
         disabled={!inputValue}
