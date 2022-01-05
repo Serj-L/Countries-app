@@ -47,8 +47,6 @@ Users should be able to:
 - [React](https://reactjs.org/)
 - [React Router v6](https://reactrouter.com/)
 
-**Note: These are just examples. Delete this note and replace the list above with your own choices**
-
 ### What I learned
 
 During developing this project I dive deeper into React Router v6 hooks.
@@ -58,4 +56,3 @@ During developing this project I dive deeper into React Router v6 hooks.
 - Website - [Serj-L](https://serj-l.github.io/Profile)
 - Frontend Mentor - [@Serj-L](https://www.frontendmentor.io/profile/yourusername)
 - LinkedIn - [Sergei Lepnyakov](https://www.linkedin.com/in/serj-l)
-

@@ -29,7 +29,7 @@ function App() {
   const [countriesList, setCountriesList] = useState<CountryDataList[]>([]);
   const [isFetchingData, setIsFetchingData] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const location = useLocation();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const toggleThemeType = () => {
@@ -42,7 +42,7 @@ function App() {
     }
   };
   const navigateHome = () => {
-    if (location.pathname === RoutesEnum.COUNTRIESLIST) {
+    if (pathname === RoutesEnum.COUNTRIESLIST) {
       return;
     }
     navigate(RoutesEnum.COUNTRIESLIST);

@@ -173,7 +173,6 @@ const CountryInfoPage: FC<CountryInfoPageProps> = ({
                           key={name}
                           className={styles.borderCountryLink}
                           to={`/${name}`}
-                          onClick={event => event.currentTarget.blur()}
                         >
                           {name}
                         </Link>
