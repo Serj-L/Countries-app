@@ -1,12 +1,14 @@
 /* eslint-disable no-restricted-globals */
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
 import {
   getCountryInfoFromAPI,
   getCountriesNameByCodesFromAPI,
-  CountryDataInfo,
+  ICountryDataInfo,
 } from '../../api/api';
+import { AppContext } from '../../App';
+
 import {
   InfoItem,
   ArrowIcon,
@@ -18,14 +20,11 @@ import imgBlank from '../../images/file-image-regular.svg';
 
 import styles from './CountryInfoPage.module.css';
 
-interface CountryInfoPageProps {
-  setErrorMessage: (message: string) => void,
-}
+interface CountryInfoPageProps {}
 
-const CountryInfoPage: FC<CountryInfoPageProps> = ({
-  setErrorMessage,
-}) => {
-  const [countryInfo, setCountryInfo] = useState<CountryDataInfo>();
+const CountryInfoPage: FC<CountryInfoPageProps> = () => {
+  const { setErrorMessage } = useContext(AppContext);
+  const [countryInfo, setCountryInfo] = useState<ICountryDataInfo>();
   const [prevCountryName, setPrevCountryName] = useState<string>('');
   const [borderCountriesNames, setBorderCountriesNames] = useState<string[]>([]);
   const [isFetchingCountryInfo, setIsFetchingCountryInfo] = useState<boolean>(true);
@@ -181,7 +180,7 @@ const CountryInfoPage: FC<CountryInfoPageProps> = ({
                         </Link>
                       );
                     })
-                    : <span>{countryInfo.borders.length ? 'No data' : 'There are no border countries'}</span>
+                    : <span className={styles.noBordersInfo}>{countryInfo.borders.length ? 'No data' : 'There are no border countries'}</span>
                   }
                 </div>
               </div>

@@ -1,36 +1,21 @@
 import { FC } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import { CountryDataList } from '../api/api';
 import { RoutesEnum } from '../types';
 import { CountriesListPage, CountryInfoPage } from '../pages';
 
-interface AppRouterProps {
-  countriesList: CountryDataList[],
-  setCountriesList: (countriesList: CountryDataList[]) => void,
-  setErrorMessage: (message: string) => void,
-}
+interface AppRouterProps {}
 
-export const AppRouter: FC<AppRouterProps> = ( {
-  countriesList,
-  setCountriesList,
-  setErrorMessage,
-} ) => {
+export const AppRouter: FC<AppRouterProps> = () => {
   return (
     <Routes>
       <Route
         path={RoutesEnum.COUNTRIESLIST}
-        element={<CountriesListPage
-          countriesList={countriesList}
-          setCountriesList={setCountriesList}
-          setErrorMessage={setErrorMessage}
-        />}
+        element={<CountriesListPage />}
       />
       <Route
         path={RoutesEnum.CONTRYINFO}
-        element={<CountryInfoPage
-          setErrorMessage={setErrorMessage}
-        />}
+        element={<CountryInfoPage />}
       />
       <Route
         path='*'

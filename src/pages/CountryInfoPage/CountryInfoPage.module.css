@@ -85,6 +85,10 @@
   transition: transform var(--transition-duration);
 }
 
+.noBordersInfo {
+  align-self: end;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .goBackBtn:hover,
   .goBackBtn:focus-within {
@@ -117,6 +121,10 @@
   .borderCountriesNamesWrapper {
     grid-template-columns: 1fr;
   }
+
+  .borderCountriesNamesWrapper {
+    gap: 1.5em;
+  }
 }
 
 @media (max-width: 592px), (max-height: 500px) {
@@ -129,7 +137,6 @@
   }
 
   .borderCountriesNamesWrapper {
-    gap: 1.5em;
     padding: 2.2em 0 1em;
   }
 

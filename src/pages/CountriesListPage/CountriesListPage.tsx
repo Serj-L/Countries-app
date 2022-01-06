@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
   getAllCountriesFromAPI,
-  CountryDataList,
   getCountriesByNameSearchFromAPI,
   getAllCountriesByRegionFilterFromAPI,
 } from '../../api/api';
@@ -11,6 +10,7 @@ import {
   LocalStorageKeys,
   RegionFilterOptions,
 } from '../../types';
+import { AppContext } from '../../App';
 
 import {
   Card,
@@ -21,19 +21,12 @@ import {
 
 import styles from './CountriesListPage.module.css';
 
-interface CountriesListPageProps {
-  countriesList: CountryDataList[],
-  setCountriesList: (countriesList: CountryDataList[]) => void,
-  setErrorMessage: (message: string) => void,
-}
+interface CountriesListPageProps {}
 
 const filterOptions: string[] = Object.values(RegionFilterOptions).filter(option => option !== RegionFilterOptions.ALLREGIONS);
 
-const CountriesListPage: FC<CountriesListPageProps> = ({
-  countriesList,
-  setCountriesList,
-  setErrorMessage,
-}) => {
+const CountriesListPage: FC<CountriesListPageProps> = () => {
+  const { countriesList, setCountriesList, setErrorMessage } = useContext(AppContext);
   const [searchValue, setSearchValue] = useState<string>(localStorage.getItem(LocalStorageKeys.SEARCHVALUE) || '');
   const [isChangeSearchInputValue, setIsChangeSearchInputValue] = useState<boolean>(true);
   const [isSearching, setIsSearching] = useState<boolean>(false);

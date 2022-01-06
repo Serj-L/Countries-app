@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { CountryDataList } from '../../api/api';
+import { ICountryDataList } from '../../api/api';
 
 import { InfoItem } from '..';
 
@@ -9,7 +9,7 @@ import imgBlank from '../../images/file-image-regular.svg';
 import styles from './Card.module.css';
 
 interface CardProps {
-  countryData: CountryDataList
+  countryData: ICountryDataList
   onClickHandler: () => void;
 }
 

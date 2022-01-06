@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
   getAllCountriesFromAPI,
   getCountriesByNameSearchFromAPI,
   getAllCountriesByRegionFilterFromAPI,
-  CountryDataList,
+  ICountryDataList,
 } from './api/api';
 import {
   LocalStorageKeys,
@@ -24,9 +24,21 @@ import {
 
 import styles from './App.module.css';
 
+interface IAppContext {
+  countriesList: ICountryDataList[],
+  setCountriesList: (list: ICountryDataList[]) => void,
+  setErrorMessage: (message: string) => void,
+}
+
+export const AppContext = createContext<IAppContext>({
+  countriesList: [],
+  setCountriesList: () => {},
+  setErrorMessage: () => {},
+});
+
 function App() {
   const [themeType, setThemeType] = useState<ThemeTypes>(localStorage.getItem(LocalStorageKeys.THEMETYPE) as ThemeTypes || ThemeTypes.LIGHT);
-  const [countriesList, setCountriesList] = useState<CountryDataList[]>([]);
+  const [countriesList, setCountriesList] = useState<ICountryDataList[]>([]);
   const [isFetchingData, setIsFetchingData] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const { pathname } = useLocation();
@@ -77,44 +89,42 @@ function App() {
   }, []);
 
   return (
-    <div
-      className={styles.App}
-      data-theme-type={themeType}
-    >
-      <header className={styles.header}>
-        <div className={styles.headerContainer}>
-          <h1
-            className={styles.headerTitle}
-            onClick={navigateHome}
-          >
+    <AppContext.Provider value={{ countriesList, setCountriesList, setErrorMessage }}>
+      <div
+        className={styles.App}
+        data-theme-type={themeType}
+      >
+        <header className={styles.header}>
+          <div className={styles.headerContainer}>
+            <h1
+              className={styles.headerTitle}
+              onClick={navigateHome}
+            >
             Where in the World?
-          </h1>
-          <ThemeSwitcher
-            themeType={themeType}
-            onClickHandler={toggleThemeType}
-          />
-        </div>
-      </header>
-      <main className={styles.main}>
-        <div className={styles.mainContainer}>
-          {countriesList.length
-            ? <AppRouter
-              countriesList={countriesList}
-              setCountriesList={setCountriesList}
-              setErrorMessage={setErrorMessage}
+            </h1>
+            <ThemeSwitcher
+              themeType={themeType}
+              onClickHandler={toggleThemeType}
             />
-            : isFetchingData
-              ? <Loader paddingTop={60} />
-              : <NoData/>
-          }
-        </div>
-      </main>
-      <SnackBar
-        message={errorMessage}
-        duration={7000}
-        clearMsg={() => setErrorMessage('')}
-      />
-    </div>
+          </div>
+        </header>
+        <main className={styles.main}>
+          <div className={styles.mainContainer}>
+            {countriesList.length
+              ? <AppRouter />
+              : isFetchingData
+                ? <Loader paddingTop={60} />
+                : <NoData/>
+            }
+          </div>
+        </main>
+        <SnackBar
+          message={errorMessage}
+          duration={7000}
+          clearMsg={() => setErrorMessage('')}
+        />
+      </div>
+    </AppContext.Provider>
   );
 }
 
